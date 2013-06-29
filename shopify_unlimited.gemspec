@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = ShopifyUnlimited::VERSION
   spec.authors       = ["Michael Johnston"]
   spec.email         = ["lastobelus@mac.com"]
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{use limit: false in api requests, & sleep while waiting for limit to reset}
+  spec.summary       = %q{use limit: false in api requests, & sleep while waiting for limit to reset}
   spec.homepage      = ""
   spec.license       = "MIT"
 
@@ -20,4 +20,5 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.3"
   spec.add_development_dependency "rake"
+  spec.add_development_dependency "rspec"
 end
