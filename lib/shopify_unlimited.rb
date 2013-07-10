@@ -1,5 +1,2 @@
 require "shopify_unlimited/version"
-
-module ShopifyUnlimited
-  # Your code goes here...
-end
+require 'shopify_unlimited/active_resource/base_extensions'
