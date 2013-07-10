@@ -8,7 +8,7 @@ end
 puts "patching activeresource from shopify_unlimited"
 module ActiveResource
   class Base     
-    SHOPIFY_API_MAX_LIMIT = 500
+    SHOPIFY_API_MAX_LIMIT = 250
     
     class << self
       # get reference to unbound class-method #find_every
