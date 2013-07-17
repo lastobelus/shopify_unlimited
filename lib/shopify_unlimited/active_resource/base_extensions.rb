@@ -8,7 +8,7 @@ end
 puts "patching activeresource from shopify_unlimited"
 module ActiveResource
   class Base     
-    SHOPIFY_API_MAX_LIMIT = 500
+    SHOPIFY_MAX_RECORDS_PER_REQUEST = 250
     
     class << self
       # get reference to unbound class-method #find_every
@@ -25,10 +25,10 @@ module ActiveResource
         return find_every.bind(self).call(options) unless limit == false
         
         # ShopifyAPI started returning 404 if you leave this in
-        options[:params].update(:limit => SHOPIFY_API_MAX_LIMIT)
+        options[:params].update(:limit => SHOPIFY_MAX_RECORDS_PER_REQUEST)
 
         results  = []
-        limit = SHOPIFY_API_MAX_LIMIT
+        limit = SHOPIFY_MAX_RECORDS_PER_REQUEST
         last_count = 0 - limit
         page = 0
         # as long as the number of results we got back is not less than the limit we (probably) have more to fetch
