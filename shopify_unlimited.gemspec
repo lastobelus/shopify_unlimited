@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = ShopifyUnlimited::VERSION
   spec.authors       = ["Michael Johnston"]
   spec.email         = ["lastobelus@mac.com"]
-  spec.description   = %q{use limit: false in api requests, & sleep while waiting for limit to reset}
-  spec.summary       = %q{use limit: false in api requests, & sleep while waiting for limit to reset}
+  spec.description   = %q{allow use of limit: false in api requests}
+  spec.summary       = %q{allow use of limit: false in api requests}
   spec.homepage      = ""
   spec.license       = "MIT"
 
