@@ -46,7 +46,7 @@ module ActiveResource
             results.requests_made += 1
           end
         else
-          results = find_every.bind(self).call(options)
+          results.concat find_every.bind(self).call(options)
           results.requests_made += 1
         end
 
