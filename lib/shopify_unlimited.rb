@@ -3,6 +3,8 @@ require 'shopify_unlimited/active_resource/base_extensions'
 require 'shopify_unlimited/active_resource/connection_extensions'
 
 module ShopifyUnlimited
+  SHOPIFY_CREDIT_LIMIT_PERIOD = 5.minutes
+
   class << self
     attr_accessor :use_memcached
     def memcached

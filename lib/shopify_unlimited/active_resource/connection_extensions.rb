@@ -1,6 +1,6 @@
 module ::ShopifyUnlimited
-  class CreditUsed
-    SHOPIFY_CREDIT_LIMIT_PERIOD = 5.minutes
+
+  class CreditUsed    
 
     attr_accessor :time, :used
     def initialize(used)
@@ -9,11 +9,11 @@ module ::ShopifyUnlimited
     end
 
     def stale?(used)
-      (@used > used) || ((Time.now - @time) > SHOPIFY_CREDIT_LIMIT_PERIOD)
+      (@used > used) || ((Time.now - @time) > ShopifyUnlimited::SHOPIFY_CREDIT_LIMIT_PERIOD)
     end
 
     def estimated_time_until_reset
-      est = SHOPIFY_CREDIT_LIMIT_PERIOD - (Time.now - @time)
+      est = ShopifyUnlimited::SHOPIFY_CREDIT_LIMIT_PERIOD - (Time.now - @time)
       [est, 0].max
     end
 
@@ -32,7 +32,7 @@ module ::ActiveResource
         used = shopify_credit_header.split('/').shift.to_i
 
         if @shopify_credit.nil?
-          cached_time = ::ShopifyUnlimited.cached_time(SHOPIFY_CREDIT_LIMIT_PERIOD)
+          cached_time = ::ShopifyUnlimited.cached_time(ShopifyUnlimited::SHOPIFY_CREDIT_LIMIT_PERIOD)
           @shopify_credit = ::ShopifyUnlimited::CreditUsed.new(used)
           @shopify_credit.time = cached_time
         elsif @shopify_credit.stale?(used)
