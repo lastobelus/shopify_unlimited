@@ -17,16 +17,29 @@ module ShopifyUnlimited
     end
 
     def cached_time(max)
-      time = Time.now
-      time = memcached.cas(cache_key, 500) do |cached_time|
-        return time if cached_time.nil?
-        ((time - cached_time) > max) ? time : cached_time
+      now = Time.now
+      result = now
+      unless memcached.add(cache_key, now, 500)
+        memcached.cas(cache_key, 500) do |cached_time|
+          result = ((now - cached_time) > max) ? now : cached_time
+          result
+        end 
       end
-      time
+      result
     end
 
     def set_cached_time(time)
+
       memcached.set(cache_key, time, 500)
+    end  
+
+
+    def estimated_time_until_reset
+      credit_record = ShopifyAPI::Base.connection.shopify_credit
+      time = credit_record.time unless credit_record.nil?
+      time ||= cached_time(ShopifyUnlimited::SHOPIFY_CREDIT_LIMIT_PERIOD)
+      est = ShopifyUnlimited::SHOPIFY_CREDIT_LIMIT_PERIOD - (Time.now - time)
+      [est, 0].max
     end
   end
 end
