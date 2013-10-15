@@ -19,6 +19,7 @@ module ShopifyUnlimited
     def cached_time(max)
       now = Time.now
       result = now
+      return result unless memcached
       unless memcached.add(cache_key, now, 500)
         memcached.cas(cache_key, 500) do |cached_time|
           result = ((now - cached_time) > max) ? now : cached_time
@@ -29,7 +30,7 @@ module ShopifyUnlimited
     end
 
     def set_cached_time(time)
-
+      return unless memcached
       memcached.set(cache_key, time, 500)
     end  
 
