@@ -1,3 +1,3 @@
 module ShopifyUnlimited
-  VERSION = "0.0.13.threadsafe"
+  VERSION = "0.0.14.threadsafe"
 end
