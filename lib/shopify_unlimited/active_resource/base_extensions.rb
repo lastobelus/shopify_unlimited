@@ -42,13 +42,15 @@ module ActiveResource
             last_count = results.count
             options[:params][:page] = page
             ShopifyAPI::Shop.current.throttle.run do
-              results.concat find_every.bind(self).call(options)
+              next_result = find_every.bind(self).call(options)
+              results.concat next_result unless next_result.nil?
             end
             results.requests_made += 1
           end
         else
           ShopifyAPI::Shop.current.throttle.run do
-            results.concat find_every.bind(self).call(options)
+            next_result = find_every.bind(self).call(options)
+            results.concat next_result unless next_result.nil?
           end
           results.requests_made += 1
         end

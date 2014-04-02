@@ -12,6 +12,7 @@
 # for a large enough block of requests.
 
 module ShopifyAPI
+  
   class Shop
     def throttle
       @throttle ||= Throttle.new
