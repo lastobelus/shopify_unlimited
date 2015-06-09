@@ -79,8 +79,6 @@ module ShopifyUnlimited
         sleep fuzzy_sleep_time
       else
         @throttle = (0.94 + rand/20) * @throttle
-        dbg "  sleep #{rand/20}"
-        sleep rand/20
       end
       dbg "=== throttle.done ==="
       value
