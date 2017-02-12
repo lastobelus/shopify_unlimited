@@ -12,19 +12,21 @@ module ShopifyUnlimited
       @throttle_increment = @throttle
       @requests_threshold = 10
       @debug = ! ENV['SHOPIFY_UNLIMITED_DEBUG'].blank?
+      @not_found_retries = Integer(ENV['SHOPIFY_UNLIMITED_NOTFOUND_RETRIES']) rescue 1
     end
-    
+
     def dbg(msg)
       puts msg if @debug
     end
-    
+
     def run
       if @running
         return yield
       end
       @running = true
       value = nil
-      retries ||= 0
+      tries ||= 0
+      not_found_tries ||= 0
       orig_logger = ActiveResource::Base.logger
       begin
         dbg "--- throttle.run ---"
@@ -45,9 +47,9 @@ module ShopifyUnlimited
         case e.response.code
         when '404'
           dbg "  404"
-          sleep 5 + retries + (rand * rand * 5)
-          retries += 1
-          if retries < 2
+          sleep 5 + not_found_tries + (rand * rand * 5)
+          not_found_tries += 1
+          if not_found_tries <= @not_found_retries
             ActiveResource::Base.logger ||= Logger.new(STDOUT)
             ActiveResource::Base.logger.info "Shopify returned not found: #{e.message}. Retrying"
             retry
@@ -59,9 +61,9 @@ module ShopifyUnlimited
           dbg "  429"
           ActiveResource::Base.logger.info "Shopify hit api limit" if ActiveResource::Base.logger
           @throttle += rand/5
-          retries += 1
-          sleep (@throttle * 4 * retries) + rand/10
-          if retries < 10
+          tries += 1
+          sleep (@throttle * 4 * tries) + rand/10
+          if tries < 10
             retry
           else
             raise
